@@ -156,8 +156,6 @@ function animate(){
         boid.avoidWalls();
         boid.controlSpeed();
         boid.draw();
-        if(boid.x ==0 && boid.y == 0)
-            console.log(boid.x,boid.y);
     }
     requestAnimationFrame(animate);
 }
