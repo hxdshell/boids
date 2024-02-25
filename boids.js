@@ -56,8 +56,10 @@ class Boid{
                 count++;
             }
         }
-        closeX /= count;
-        closeY /= count;
+        if(count > 0){
+            closeX /= count;
+            closeY /= count;
+        }
 
         this.velX += (closeX-this.velX) * aligningFactor;
         this.velY += (closeY-this.velY) * aligningFactor;
@@ -75,8 +77,10 @@ class Boid{
                 count++;
             }
         }
-        closeX /= count;
-        closeY /= count;
+        if(count > 0){
+            closeX /= count;
+            closeY /= count;
+        }
 
         this.velX += (closeX-this.x) * cohesionFactor;
         this.velY += (closeY-this.y) * cohesionFactor;
@@ -99,21 +103,22 @@ class Boid{
     draw(){
         ctx.fillStyle="white";
         const angle = Math.atan2(this.velY,this.velX);
-        
-        ctx.save();
-        ctx.translate(this.x,this.y);
+        ctx.translate(this.x, this.y);
         ctx.rotate(angle);
-        ctx.restore();
-        
+
         ctx.beginPath();
-        ctx.moveTo(this.x,this.y);
-        ctx.lineTo(this.x+8,this.y+10);
-        ctx.lineTo(this.x-8,this.y+10);
+        ctx.moveTo(0,0);
+        ctx.lineTo(15, 7);
+        ctx.lineTo(-15, 7);
+        ctx.lineTo(0,0);
         ctx.fill();
+
+        ctx.rotate(-angle);
+        ctx.translate(-this.x, -this.y);
     }
     avoidWalls(){
         const margin = 150;
-        const turnFactor = 0.9;
+        const turnFactor = 0.7;
         
 
         if(this.x > canvas.width-margin)
@@ -140,7 +145,6 @@ while(boids.length < 250){
     )
     boids.push(boid);
 }
-
 function animate(){
     ctx.fillStyle = "rgb(17 17 17)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -152,8 +156,9 @@ function animate(){
         boid.avoidWalls();
         boid.controlSpeed();
         boid.draw();
+        if(boid.x ==0 && boid.y == 0)
+            console.log(boid.x,boid.y);
     }
-
     requestAnimationFrame(animate);
 }
 animate();
